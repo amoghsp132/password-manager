@@ -25,7 +25,7 @@ function loadPasswords() {
                 <td>${item.website}</td>
                 <td>${item.username}</td>
                 <td>
-                    <span id="pass-${item.id}" style="display: none">${item.password || "******"}</span>
+                    <span id="pass-${item.id}" style="display: none">******</span>
                     <button onclick="togglePassword(${item.id})">Show/Hide</button>
                 </td>
                 <td>
@@ -38,9 +38,35 @@ function loadPasswords() {
 }
 
 function togglePassword(id) {
-    const pass = document.getElementById(`pass-${id}`);
-    pass.style.display = pass.style.display === "none" ? "inline" : "none";
+    const passElement = document.getElementById(`pass-${id}`);
+    const buttonElement = passElement.nextElementSibling; // Get the button element
+
+    if (passElement.dataset.loaded === "true") {
+        // Toggle visibility if the password is already loaded
+        if (passElement.style.display === "none") {
+            passElement.style.display = "inline";
+            buttonElement.innerText = "Hide";
+        } else {
+            passElement.style.display = "none";
+            buttonElement.innerText = "Show";
+        }
+    } else {
+        // Fetch the password from the backend
+        fetch(`${API_BASE}/get_password/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.password) {
+                passElement.innerText = data.password;
+                passElement.style.display = "inline"; // Show password
+                buttonElement.innerText = "Hide";
+                passElement.dataset.loaded = "true"; // Mark as loaded
+            } else {
+                alert("Password not found.");
+            }
+        });
+    }
 }
+
 
 function deletePassword(id) {
     fetch(`${API_BASE}/delete_password/${id}`, { method: "DELETE" })
