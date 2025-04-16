@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>Password Manager</h1>
+
+        <div class="form">
+            <input type="text" id="website" placeholder="Website">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="addPassword()">Save</button>
+            <button onclick="generatePassword()">Generate Password</button>
+        </div>
+
+        <div class="search">
+            <input type="text" id="search" placeholder="Search Website" oninput="loadPasswords()">
+        </div>
+
+        <h2>Stored Passwords</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Website</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="passwordTable"></tbody>
+        </table>
+
+        <button onclick="clearDatabase()" class="danger-btn">Clear Database</button>
+    </div>
+</body>
+</html>
